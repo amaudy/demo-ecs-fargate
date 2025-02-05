@@ -4,10 +4,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
-    datadog = {
-      source  = "DataDog/datadog"
-      version = "~> 3.30.0"
-    }
     archive = {
       source  = "hashicorp/archive"
       version = "~> 2.4.0"
@@ -20,14 +16,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-# Configure the Datadog Provider
-provider "datadog" {
-  api_key  = var.datadog_api_key
-  app_key  = var.datadog_app_key
-  api_url  = "https://api.us5.datadoghq.com"
-  validate = true
-}
-
 # Create ECS Cluster using the ecs-cluster module
 module "vpc" {
   source = "./modules/vpc"
@@ -38,15 +26,6 @@ module "s3_logging" {
 
   environment = var.environment
   tags        = var.tags
-}
-
-module "datadog_integration" {
-  source = "./modules/datadog-integration"
-
-  environment         = var.environment
-  datadog_external_id = var.datadog_external_id
-  alb_logs_bucket_arn = module.s3_logging.bucket_arn
-  tags                = var.tags
 }
 
 module "ecs_cluster" {
@@ -108,20 +87,6 @@ module "fastapi_echo" {
   depends_on = [
     module.vpc,
     module.s3_logging
-  ]
-}
-
-module "datadog_dashboard" {
-  source = "./modules/datadog-dashboard"
-
-  environment     = var.environment
-  alb_name        = module.fastapi_echo.alb_name
-  datadog_api_key = var.datadog_api_key
-  datadog_app_key = var.datadog_app_key
-
-  depends_on = [
-    module.datadog_integration,
-    module.fastapi_echo
   ]
 }
 
