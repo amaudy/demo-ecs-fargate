@@ -1,0 +1,6 @@
+# Datadog Configuration
+# Get these values from Datadog AWS Integration page
+
+datadog_external_id = ""
+datadog_api_key     = ""
+datadog_app_key     = ""
