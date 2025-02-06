@@ -116,7 +116,8 @@ def process_alb_log(log_entry):
         log_record = {
             'timestamp': timestamp.isoformat(),
             'ddsource': 'alb',
-            'service': fields[1],  # ALB name
+            'host': fields[1],  # ALB name
+            'service': "ecom-api",
             'http': {
                 'method': method,
                 'url': path,
