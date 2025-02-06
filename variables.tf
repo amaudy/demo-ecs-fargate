@@ -58,3 +58,15 @@ variable "datadog_api_key_secret_arn" {
   description = "ARN of the existing Secrets Manager secret containing the Datadog API key"
   type        = string
 }
+
+variable "datadog_api_url" {
+  description = "The Datadog API URL"
+  type        = string
+  default     = "https://api.datadoghq.com/"
+}
+
+variable "datadog_app_key" {
+  description = "Datadog APP key for API access"
+  type        = string
+  sensitive   = true
+}

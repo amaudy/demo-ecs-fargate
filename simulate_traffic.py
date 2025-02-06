@@ -6,7 +6,7 @@ import concurrent.futures
 
 # Configuration
 ALB_URL = "http://abc1234-dd-demo-fe-alb-982008623.us-east-1.elb.amazonaws.com"
-NUM_REQUESTS = 1000  # Total number of requests to make
+NUM_REQUESTS = 10  # Total number of requests to make
 CONCURRENT_USERS = 5  # Number of concurrent users/threads
 
 # Sample data

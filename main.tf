@@ -8,6 +8,9 @@ terraform {
       source  = "hashicorp/archive"
       version = "~> 2.4.0"
     }
+    datadog = {
+      source = "DataDog/datadog"
+    }
   }
 }
 
@@ -100,4 +103,12 @@ module "datadog_forwarder" {
   alb_logs_bucket_id    = module.s3_logging.alb_logs_bucket_id
   alb_logs_bucket_arn   = module.s3_logging.alb_logs_bucket_arn
   tags                  = var.tags
+}
+
+module "dd_dashboard" {
+  source = "./modules/dd-dashboard-top5"
+
+  environment  = var.environment
+  service_name = "ecom-api"
+  tags        = ["env:${var.environment}", "service:ecom-api"]
 }
