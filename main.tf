@@ -93,10 +93,11 @@ module "fastapi_echo" {
 module "datadog_forwarder" {
   source = "./modules/datadog-forwarder"
 
-  environment         = var.environment
-  project_name        = var.project_name
-  datadog_api_key     = var.datadog_api_key
-  alb_logs_bucket_arn = module.s3_logging.alb_logs_bucket_arn
-  alb_logs_bucket_id  = module.s3_logging.alb_logs_bucket_id
-  tags                = var.tags
+  environment           = var.environment
+  project_name          = var.cluster_name
+  datadog_api_key       = var.datadog_api_key
+  datadog_api_key_secret_arn = var.datadog_api_key_secret_arn
+  alb_logs_bucket_id    = module.s3_logging.alb_logs_bucket_id
+  alb_logs_bucket_arn   = module.s3_logging.alb_logs_bucket_arn
+  tags                  = var.tags
 }

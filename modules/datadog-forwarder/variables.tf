@@ -14,6 +14,11 @@ variable "datadog_api_key" {
   sensitive   = true
 }
 
+variable "datadog_api_key_secret_arn" {
+  description = "ARN of the existing Secrets Manager secret containing the Datadog API key"
+  type        = string
+}
+
 variable "alb_logs_bucket_arn" {
   description = "ARN of the S3 bucket containing ALB logs"
   type        = string

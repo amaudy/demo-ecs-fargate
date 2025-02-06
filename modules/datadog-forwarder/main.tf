@@ -67,18 +67,6 @@ resource "aws_iam_role_policy" "datadog_forwarder" {
   })
 }
 
-# Store Datadog API key in AWS Secrets Manager
-resource "aws_secretsmanager_secret" "datadog_api_key" {
-  name        = "datadog-api-key-${var.environment}"
-  description = "Datadog API Key for Lambda Forwarder"
-  tags        = var.tags
-}
-
-resource "aws_secretsmanager_secret_version" "datadog_api_key" {
-  secret_id     = aws_secretsmanager_secret.datadog_api_key.id
-  secret_string = var.datadog_api_key
-}
-
 # Create Lambda function for Datadog Forwarder
 resource "aws_lambda_function" "datadog_forwarder" {
   filename         = data.archive_file.lambda_zip.output_path
@@ -93,7 +81,7 @@ resource "aws_lambda_function" "datadog_forwarder" {
 
   environment {
     variables = {
-      DD_API_KEY_SECRET_ARN = aws_secretsmanager_secret.datadog_api_key.arn
+      DD_API_KEY_SECRET_ARN = var.datadog_api_key_secret_arn
       DD_SITE               = "us5.datadoghq.com"
       DD_TAGS               = join(",", [
         "env:${var.environment}",
@@ -156,7 +144,7 @@ resource "aws_iam_role_policy" "secrets_access" {
         Action = [
           "secretsmanager:GetSecretValue"
         ]
-        Resource = [aws_secretsmanager_secret.datadog_api_key.arn]
+        Resource = [var.datadog_api_key_secret_arn]
       }
     ]
   })

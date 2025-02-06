@@ -53,3 +53,8 @@ variable "datadog_api_key" {
   type        = string
   sensitive   = true
 }
+
+variable "datadog_api_key_secret_arn" {
+  description = "ARN of the existing Secrets Manager secret containing the Datadog API key"
+  type        = string
+}
