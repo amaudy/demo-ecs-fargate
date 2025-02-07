@@ -114,4 +114,33 @@ resource "datadog_dashboard" "alb_monitoring" {
       }
     }
   }
+
+  widget {
+    toplist_definition {
+      title = "Top Browsers"
+      request {
+        q = "top(count:alb.http.request{service:ecom-api} by {http.user_agent}, 10, 'last', 'desc')"
+      }
+      style {
+        palette = "dog_classic"
+      }
+    }
+  }
+
+  widget {
+    pie_definition {
+      title = "Browser Distribution"
+      request {
+        query {
+          metric_query = "count:alb.http.request{service:ecom-api} by {http.user_agent}"
+          aggregator = "sum"
+        }
+      }
+      style {
+        palette = "cool"
+      }
+    }
+  }
+
+  tags = var.tags
 }

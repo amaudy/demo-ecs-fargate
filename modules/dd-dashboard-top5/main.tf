@@ -41,5 +41,49 @@ resource "datadog_dashboard" "top5_paths" {
     }
   }
 
-  tags = ["team:devops"]
+  widget {
+    toplist_definition {
+      title = "Top 10 Browsers"
+      request {
+        q = "top(sum:alb.http.request.count{service:${var.service_name}} by {http.user_agent}, 10, 'sum', 'desc')"
+      }
+      custom_link {
+        label = "View All Browsers"
+        link  = "https://us5.datadoghq.com/logs?query=service:${var.service_name}"
+      }
+    }
+  }
+
+  widget {
+    group_definition {
+      title = "Browser Usage Statistics"
+      layout_type = "ordered"
+      
+      widget {
+        timeseries_definition {
+          title = "Browser Distribution Over Time"
+          request {
+            q = "top(sum:alb.http.request.count{service:${var.service_name}} by {http.user_agent}, 5, 'sum', 'desc')"
+            display_type = "area"
+          }
+        }
+      }
+
+      widget {
+        query_table_definition {
+          title = "Browser Statistics"
+          request {
+            q = "top(sum:alb.http.request.count{service:${var.service_name}} by {http.user_agent}, 10, 'sum', 'desc')"
+            conditional_formats {
+              comparator = ">"
+              value = 0
+              palette = "white_on_green"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  tags = var.tags
 }

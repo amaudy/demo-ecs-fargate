@@ -18,6 +18,16 @@ products = [
 user_ids = [f"user_{i}" for i in range(1, 11)]
 categories = ["electronics", "computers", "accessories"]
 
+# Add common browser user agents
+user_agents = [
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Edge/120.0.0.0",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1"
+]
+
 def generate_random_request():
     """Generate a random API request"""
     endpoints = [
@@ -55,11 +65,16 @@ def send_request():
     method, path, data = generate_random_request()
     url = f"{ALB_URL}{path}"
     
+    # Add random user agent to headers
+    headers = {
+        "User-Agent": random.choice(user_agents)
+    }
+    
     try:
         if method == "GET":
-            response = requests.get(url, timeout=5)
+            response = requests.get(url, headers=headers, timeout=5)
         else:
-            response = requests.post(url, json=data, timeout=5)
+            response = requests.post(url, json=data, headers=headers, timeout=5)
         
         print(f"{datetime.now().isoformat()} - {method} {path} - Status: {response.status_code}")
     except Exception as e:

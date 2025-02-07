@@ -118,11 +118,13 @@ def process_alb_log(log_entry):
             'ddsource': 'alb',
             'host': fields[1],  # ALB name
             'service': "ecom-api",
+            'trace_id': fields[14].strip('"') if len(fields) > 14 else '',  # X-Amzn-Trace-Id header
             'http': {
                 'method': method,
                 'url': path,
                 'status_code': safe_int(fields[7]),  # ELB status code
-                'target_status_code': safe_int(fields[8])  # Target status code
+                'target_status_code': safe_int(fields[8]),  # Target status code
+                'user_agent': fields[12].strip('"') if len(fields) > 12 else 'unknown'  # User Agent
             },
             'network': {
                 'client': {
