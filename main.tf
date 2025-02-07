@@ -94,6 +94,18 @@ module "fastapi_echo" {
   ]
 }
 
+module "traffic_simulator" {
+  source = "./modules/traffic-simulator"
+  
+  environment         = var.environment
+  target_url         = "http://${module.fastapi_echo.alb_dns_name}"
+  num_requests       = 20
+  concurrent_users   = 5
+  schedule_expression = "rate(5 minutes)"
+  is_enabled         = true
+  tags              = var.tags
+}
+
 module "datadog_forwarder" {
   source = "./modules/datadog-forwarder"
 

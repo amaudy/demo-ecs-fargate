@@ -85,5 +85,5 @@ resource "datadog_dashboard" "top5_paths" {
     }
   }
 
-  tags = var.tags
+  tags = ["team:devops"]
 }
